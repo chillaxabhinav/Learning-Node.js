@@ -11,17 +11,17 @@ app.use((req,res,next) => {
 
 app.use((req,res,next) => {
     console.log('THIS IS MY SECOND MIDDLEWARE');
-    next();
+    res.send('<h1>Send from express js</h1>');
 })
 
 
-// Below my() function is also my middleware function called in line 23
+// Below my() function is also my middleware function
 // so every use() method is treated as middleware and next() method get us to the next use() method defined
-function my(){
-    console.log('will this work ?');
-}
-
-app.use(my);
+// function my(req,res,next){
+//     console.log('will this work ?');
+//     res.send('<h1>Send from express js</h1>');
+// }
+// app.use(my);
 
 
 const server = http.createServer(app);
