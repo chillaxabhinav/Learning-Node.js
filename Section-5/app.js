@@ -16,6 +16,7 @@ app.use((req,res,next) => {
 
 
 // Below my() function is also my middleware function called in line 23
+// so every use() method is treated as middleware and next() method get us to the next use() method defined
 function my(){
     console.log('will this work ?');
 }
