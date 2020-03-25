@@ -6,7 +6,7 @@ const app = express();
 
 app.use((req,res,next) => {
     console.log('THIS IS MY FIRST MIDDLEWARE');
-    next();
+    next(); // Allow us to continue/jump to next middleware present
 });
 
 app.use((req,res,next) => {
