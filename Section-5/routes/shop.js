@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     console.log('This is my middleware');
-    res.send('<h1>Send from express js</h1>');
+    res.send('<h1>Hello from express js</h1>');
 });
 
 
