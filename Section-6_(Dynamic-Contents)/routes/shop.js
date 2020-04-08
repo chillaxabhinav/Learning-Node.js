@@ -4,9 +4,18 @@ const express = require('express');
 
 const router = express.Router();
 
+const adminData = require('./admin');
+
 router.get('/', (req, res, next) => {
-    console.log('This is my middleware');
-    res.sendfile(path.join(__dirname,'..','views','shop.html'));
+    const products  = adminData.products;
+    res.render('shop.ejs',{
+        prod : products,
+        pageTitle : 'shop',
+        path : '/',
+        hasProducts : products.length > 0,
+        activeShop : true,
+        productCSS : true
+    });
 });
 
 
