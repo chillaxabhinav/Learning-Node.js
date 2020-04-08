@@ -4,26 +4,16 @@ const express = require('express');
 
 const router = express.Router();
 
-const products = [];
+const productsController = require('../controllers/products');
+
 
 // As /admin part of the url is fixed/filtered in our app.js file so we don't have to repeat those
 
 // admin/add-product ==> GET Request
-router.get('/add-product', (req, res, next) => {
-    res.render('add-product.ejs',{
-        pageTitle : 'Add Product',
-        path : '/admin/add-product',
-        formsCSS : true,
-        productCSS : true,
-        activeAddProduct : true
-    });
-});
+router.get('/add-product', productsController.getAddProduct);
 
 // admin/add-product ==> POST Request
-router.post('/add-product', (req, res, next) => {
-    products.push({title: req.body.title});
-    res.redirect('/');
-});
+router.post('/add-product', productsController.postAddProduct);
 
 // // admin/product ==> POST Request
 // router.post('/product', (req, res, next) => {
@@ -33,6 +23,4 @@ router.post('/add-product', (req, res, next) => {
 
 
 
-
-exports.products = products;
-exports.routes = router;
+module.exports = router;
