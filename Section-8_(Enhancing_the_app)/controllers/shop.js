@@ -21,12 +21,9 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-    Product.fetchAll((products) => {
-        res.render('shop/cart.ejs', {
-            prod: products,
-            pageTitle: 'Your Cart',
-            path: '/cart',
-        });
+    res.render('shop/cart.ejs', {
+        pageTitle: 'Your Cart',
+        path: '/cart',
     });
 };
 
@@ -37,5 +34,12 @@ exports.getCheckout = (req, res, next) => {
             pageTitle: 'Checkout',
             path: '/checkout',
         });
+    });
+};
+
+exports.getOrders = (req, res, next) => {
+    res.render('shop/orders.ejs', {
+        pageTitle: 'Orders',
+        path: '/orders',
     });
 };
