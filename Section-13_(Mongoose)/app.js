@@ -2,12 +2,12 @@ const path = require('path');
 
 const express = require('./node_modules/express');
 const bodyParser = require('./node_modules/body-parser');
+const mongoose = require('mongoose');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
 const User = require('./models/user.js');
 
 const app = express();
@@ -35,6 +35,10 @@ app.use(shopRoutes);
 
 app.use('/',errorController.get404Page);
 
-mongoConnect(() => {
-    app.listen(3000);
-})
+mongoose.connect('mongodb://localhost:27017')
+    .then(result => {
+        app.listen(3000);
+    })
+    .catch(err => {
+        console.log(err);
+    });
