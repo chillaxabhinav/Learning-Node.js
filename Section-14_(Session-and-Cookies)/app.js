@@ -1,56 +1,57 @@
 const path = require('path');
 
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require('./node_modules/express');
+const bodyParser = require('./node_modules/body-parser');
 const mongoose = require('mongoose');
-
-const errorController = require('./controllers/error');
-const User = require('./models/user');
-
-const app = express();
-
-app.set('view engine', 'ejs');
-app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+const errorController = require('./controllers/error');
+const User = require('./models/user.js');
 
-app.use((req, res, next) => {
-  User.findById('5bab316ce0a7c75f783cb8a8')
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
+const app = express();
+
+app.set('view engine','ejs');
+app.set('views','views');
+
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(express.static(path.join(__dirname,'public')));
+
+app.use((req,res,next) => {
+    User.findById('5e985e6a9ebefa371c50e743')
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+        })
 });
 
-app.use('/admin', adminRoutes);
+app.use('/admin',adminRoutes);
+
 app.use(shopRoutes);
 
-app.use(errorController.get404);
+app.use('/',errorController.get404Page);
 
-mongoose
-  .connect(
-    'mongodb+srv://maximilian:9u4biljMQc4jjqbe@cluster0-ntrwp.mongodb.net/shop?retryWrites=true'
-  )
-  .then(result => {
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          name: 'Max',
-          email: 'max@test.com',
-          cart: {
-            items: []
-          }
-        });
-        user.save();
-      }
+mongoose.connect('mongodb://localhost:27017')
+    .then(result => {
+        User.findOne().then(user => {
+            if(!user){
+                const user = new User({
+                    name: 'Abhinav',
+                    email: 'abc@gmail.com',
+                    cart: {
+                        items: []
+                    }
+                });
+                user.save();
+            }
+        })
+
+        app.listen(3000);
+    })
+    .catch(err => {
+        console.log(err);
     });
-    app.listen(3000);
-  })
-  .catch(err => {
-    console.log(err);
-  });
