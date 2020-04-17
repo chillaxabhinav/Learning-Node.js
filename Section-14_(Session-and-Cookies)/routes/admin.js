@@ -1,26 +1,24 @@
 const path = require('path');
 
-const express = require('../node_modules/express');
-
-const router = express.Router();
+const express = require('express');
 
 const adminController = require('../controllers/admin');
 
+const router = express.Router();
 
-// As /admin part of the url is fixed/filtered in our app.js file so we don't have to repeat those
-
-// admin/add-product ==> GET Request
+// /admin/add-product => GET
 router.get('/add-product', adminController.getAddProduct);
 
-// admin/add-product ==> POST Request
-router.post('/add-product', adminController.postAddProduct);
-
+// /admin/products => GET
 router.get('/products', adminController.getProducts);
+
+// /admin/add-product => POST
+router.post('/add-product', adminController.postAddProduct);
 
 router.get('/edit-product/:productId', adminController.getEditProduct);
 
 router.post('/edit-product', adminController.postEditProduct);
 
-router.post('/delete-product', adminController.postdeleteProduct);
+router.post('/delete-product', adminController.postDeleteProduct);
 
 module.exports = router;
