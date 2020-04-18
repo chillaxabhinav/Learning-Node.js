@@ -29,14 +29,19 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(session({secret : 'my secret', resave : false, saveUninitialized : false, store : store}));
 
 app.use((req,res,next) => {
-    User.findById('5e985e6a9ebefa371c50e743')
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    if(req.session.user){
+        User.findById(req.session.user._id)
+            .then(user => {
+                req.user = user;
+                next();
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+    else{
+        next();
+    }
 });
 
 app.use('/admin',adminRoutes);
