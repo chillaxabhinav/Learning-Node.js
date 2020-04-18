@@ -1,29 +1,28 @@
 {
-  "name": "nodejs-complete-guide",
+  "name": "section-4",
   "version": "1.0.0",
-  "description": "Complete Node.js Guide",
-  "main": "app.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
-    "start-server": "node app.js"
+    "start": "nodemon app.js"
   },
-  "author": "Maximilian Schwarzmüller",
+  "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.18.3"
+    "nodemon": "^2.0.2"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "connect-mongodb-session": "^2.0.3",
-    "ejs": "^2.6.1",
-    "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
-    "express-session": "^1.15.6",
-    "mongodb": "^3.1.6",
-    "mongoose": "^5.2.17",
-    "mysql2": "^1.6.1",
-    "pug": "^2.0.3",
-    "sequelize": "^5.0.0-beta.11"
+    "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.3.1",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.0.2",
+    "express-session": "^1.17.1",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.9",
+    "mysql2": "^2.1.0",
+    "pug": "^2.0.4",
+    "sequelize": "^5.21.6"
   }
 }
