@@ -1,5 +1,5 @@
 {
     "jshint.options": {
-        "esversion": 8
+        "esversion": 9
     }
 }

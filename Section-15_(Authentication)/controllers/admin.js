@@ -89,7 +89,7 @@ exports.getProducts = (req, res, next) => {
             });
         }).catch(err => {
             console.log(err);
-        })
+        });
 };
 
 exports.postdeleteProduct = (req, res, next) => {

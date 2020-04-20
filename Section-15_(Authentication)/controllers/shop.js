@@ -58,7 +58,7 @@ exports.getCart = (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
-        })
+        });
 };
 
 exports.postCart = (req,res,next) => {
@@ -72,7 +72,7 @@ exports.postCart = (req,res,next) => {
         })
         .catch(err => {
             console.log(err);
-        })
+        });
 };
 
 exports.postCartDeleteProduct = (req,res,next) =>{
@@ -98,7 +98,7 @@ exports.getOrders = (req, res, next) => {
         })
         .catch(err =>{
             console.log(err);
-        })
+        });
     
 };
 
@@ -129,4 +129,4 @@ exports.postOrder = (req,res,next) => {
             console.log(err);
         });
         
-}
+};
