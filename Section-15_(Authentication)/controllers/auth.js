@@ -5,16 +5,14 @@ const bcrypt = require('bcryptjs');
 exports.getLogin = (req, res, next) => {
     res.render('auth/login.ejs',{
         path : '/login',
-        pageTitle: 'Login',
-        isAuthenticated: false
+        pageTitle: 'Login'
     });
 };
 
 exports.getSignup = (req, res, next) => {
     res.render('auth/signup', {
         path: '/signup',
-        pageTitle: 'Signup',
-        isAuthenticated: false
+        pageTitle: 'Signup'
     });
 };
 
