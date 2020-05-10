@@ -5,24 +5,24 @@ const nodemailer = require('nodemailer');
 const sendGrid = require('nodemailer-sendgrid-transport');
 
 const transporter = nodemailer.createTransport(sendGrid({
-    auth : {
-        api_key: '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'
+    auth: {
+        api_key: 'secret'
     }
 }));
 
 
 exports.getLogin = (req, res, next) => {
     let message = req.flash('error');
-    if(message.length > 0){
+    if (message.length > 0) {
         message = message[0];
     }
-    else{
+    else {
         message = null;
     }
-    res.render('auth/login.ejs',{
-        path : '/login',
+    res.render('auth/login.ejs', {
+        path: '/login',
         pageTitle: 'Login',
-        errorMessage : message
+        errorMessage: message
     });
 };
 
@@ -41,14 +41,14 @@ exports.getSignup = (req, res, next) => {
     });
 };
 
-exports.postSignup = (req, res, next) => { 
+exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    User.findOne({email : email})
+    User.findOne({ email: email })
         .then(userDoc => {
-            if(userDoc){
-                req.flash('error','Email exist already, please pick a different one');
+            if (userDoc) {
+                req.flash('error', 'Email exist already, please pick a different one');
                 return res.redirect('/signup');
             }
             return bcrypt.hash(password, 12)
@@ -62,30 +62,30 @@ exports.postSignup = (req, res, next) => {
                 }).then(result => {
                     res.redirect('/login');
                     return transporter.sendMail({
-                        to : email,
-                        from : 'shop@node-complete.com',
-                        subject : 'SignUp Succeeded',
-                        html : '<h1>Successfully signed up</h1>'
+                        to: email,
+                        from: '2016007@iiitdmj.ac.in',
+                        subject: 'SignUp Succeeded',
+                        html: '<h1>Successfully signed up</h1>'
                     })
                 }).catch(err => {
                     console.log(err);
                 });
         }).catch(err => {
             console.log(err);
-        });;    
+        });;
 };
 
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    User.findOne({email : email})
+    User.findOne({ email: email })
         .then(user => {
-            if(!user){
+            if (!user) {
                 req.flash('error', 'Invalid email or password');
                 return res.redirect('/login');
             }
             bcrypt.compare(password, user.password).then(doMatch => {
-                if(doMatch){
+                if (doMatch) {
                     req.session.isLoggedIn = true;
                     req.session.user = user;
                     return req.session.save((err) => {
@@ -93,7 +93,7 @@ exports.postLogin = (req, res, next) => {
                         res.redirect('/');
                     });
                 }
-                else{
+                else {
                     req.flash('error', 'Invalid email or password');
                     return res.redirect('/login');
                 }

@@ -5,10 +5,11 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendGrid = require('nodemailer-sendgrid-transport');
+const { validationResult } = require('express-validator/check');
 
 const transporter = nodemailer.createTransport(sendGrid({
     auth : {
-        api_key: 'secret'
+        api_key: 'Secret'
     }
 }));
 
@@ -43,39 +44,38 @@ exports.getSignup = (req, res, next) => {
     });
 };
 
-exports.postSignup = (req, res, next) => { 
+exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    User.findOne({email : email})
-        .then(userDoc => {
-            if(userDoc){
-                req.flash('error','Email exist already, please pick a different one');
-                return res.redirect('/signup');
-            }
-            return bcrypt.hash(password, 12)
-                .then(hashedPassword => {
-                    const user = new User({
-                        email: email,
-                        password: hashedPassword,
-                        cart: { items: [] }
-                    });
-                    return user.save();
-                }).then(result => {
-                    res.redirect('/login');
-                    return transporter.sendMail({
-                        to : email,
-                        from : '2016007@iiitdmj.ac.in',
-                        subject : 'SignUp Succeeded',
-                        html : '<h1>Successfully signed up</h1>'
-                    })
-                }).catch(err => {
-                    console.log(err);
-                });
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(422).render('auth/signup', {
+            path: '/signup',
+            pageTitle: 'Signup',
+            errorMessage: errors.array()[0].msg
+        });
+    }
+    
+    bcrypt.hash(password, 12)
+        .then(hashedPassword => {
+            const user = new User({
+                email: email,
+                password: hashedPassword,
+                cart: { items: [] }
+            });
+            return user.save();
+        }).then(result => {
+            res.redirect('/login');
+            return transporter.sendMail({
+                to : email,
+                from : '2016007@iiitdmj.ac.in',
+                subject : 'SignUp Succeeded',
+                html : '<h1>Successfully signed up</h1>'
+            })
         }).catch(err => {
             console.log(err);
-        });;    
-};
+        });
+}
 
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
