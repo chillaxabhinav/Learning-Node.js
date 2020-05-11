@@ -13,10 +13,19 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
-    const imageURL = req.body.image;
+    const image = req.file;
     const price = req.body.price;
     const description = req.body.description;
-    console.log(imageURL);
+    
+    if(!image){
+        return res.status(422).render('admin/edit-product.ejs', {
+            pageTitle: 'Add Product',
+            path: '/admin/add-product',
+            editing: false
+        });
+    }
+
+    const imageURL = image.path;
     const product = new Product({
         title : title,
         imageURL : imageURL,
@@ -59,16 +68,20 @@ exports.postEditProduct = (req, res, next) => {
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
-    const updatedImageURL = req.body.imageURL;
+    const image = req.file;
     const updatedDescription = req.body.description;
+
     Product.findById(prodId).then(product => {
         if(product.userId.toString() !== req.user._id.toString()){
             return res.redirect('/');
         }
         product.title = updatedTitle;
         product.price = updatedPrice;
-        product.imageURL = updatedImageURL;
+        // product.imageURL = updatedImageURL;
         product.description = updatedDescription;
+        if(image){
+            product.imageURL = image.path;
+        }
         return product.save().then(result =>{
             console.log('Updated Product');
             res.redirect('/admin/products');
