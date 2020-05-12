@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
+const fs = require('fs');
+const path = require('path');
 
 exports.getProducts = (req, res, next) => {
     Product.find().then(products => {
@@ -124,4 +126,32 @@ exports.postOrder = (req,res,next) => {
             console.log(err);
         });
         
+};
+
+
+exports.getInvoice = (req, res, next) => {
+    const orderId = req.params.orderId;
+    Order.findById(orderId).then(order => {
+        if(!order){
+            console.log('No order found');
+            return;
+        }
+        if(order.user.userId.toString() !== req.user._id.toString()){
+            console.log('UnAuthorized');
+            return;
+        }
+    }).catch(err => {
+        console.log(err);
+    })
+    const invoiceName = 'invoice-' + orderId + '.pdf';
+    const invoicePath = path.join('invoices', invoiceName);
+    fs.readFile(invoicePath, (err, data) => {
+        if(err){
+            console.log(err);
+            return;
+        }
+        res.setHeader('Content-Type','application/pdf');
+        res.setHeader('Content-Disposition','attachment; filename="' + invoiceName + '"');
+        res.send(data);
+    })
 };
