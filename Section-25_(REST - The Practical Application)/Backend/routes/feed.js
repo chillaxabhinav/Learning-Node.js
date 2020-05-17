@@ -7,7 +7,7 @@ const router = express.Router();
 const feedController = require('../controllers/feed');
 
 // GET /feed/posts
-router.get('/posts', feedController.getPost);
+router.get('/posts', feedController.getPosts);
 
 // POST /feed/post
 router.post(
@@ -17,6 +17,8 @@ router.post(
         body('content').trim().isLength({min : 5})
     ],
     feedController.createPost);
+
+router.get('/post/:postId', feedController.getPost);
 
 
 module.exports = router;
