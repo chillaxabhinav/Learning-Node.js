@@ -1,5 +1,7 @@
 const  {validationResult} = require('express-validator/check');
 
+const Post = require('../models/post');
+
 module.exports.getPost = (req, res, next) => {
     res.status(200).json({
         posts : [
@@ -18,26 +20,35 @@ module.exports.getPost = (req, res, next) => {
 }
 
 module.exports.createPost = (req, res, next) => {
-    const error = validationResult(req);
+    const errors = validationResult(req);
     if(!error){
-        return res.status(422).json({message : 'Validation failed', errors : error.array()});
+        const error = new Error('Validation failed');
+        error.statusCode = 422;
+        throw error;
     }
     const title = req.body.title;
     const content = req.body.content;
     
     // Create Post in DB
 
-    res.status(201).json({
-        message : 'Created post successfully',
-        post : { 
-            _id : new Date().toISOString(),
-            title : title,
-            content : content,
-            creator : 
-                {
-                    name : 'Abhinav'
-                },
-            createdAt : new Date()
-            }
+    const post = new Post({
+        title : title,
+        content : content,
+        imageUrl : 'images/me.jpg',
+        creator : { name : 'Abhinav' }
     })
+    post.save()
+        .then(result => {
+            // console.log(result);
+            res.status(201).json({
+                message : 'Created Post Successfully',
+                post : result
+            })
+        })
+        .catch(err => {
+            if(!err.statusCode){
+                err.statusCode = 500;
+            }
+            next(err);
+        });
 }
