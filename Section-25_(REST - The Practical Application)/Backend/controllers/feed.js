@@ -21,11 +21,18 @@ module.exports.getPosts = (req, res, next) => {
 
 module.exports.createPost = (req, res, next) => {
     const errors = validationResult(req);
-    if(!error){
+    if(!errors){
         const error = new Error('Validation failed');
         error.statusCode = 422;
         throw error;
     }
+
+    if(!req.file){
+        const error = new Error('No image provided');
+        error.statusCode = 422;
+        throw error;
+    }
+    const imageUrl = req.file.path.replace("\\","/");
     const title = req.body.title;
     const content = req.body.content;
     
@@ -34,7 +41,7 @@ module.exports.createPost = (req, res, next) => {
     const post = new Post({
         title : title,
         content : content,
-        imageUrl : 'images/me.jpg',
+        imageUrl : imageUrl,
         creator : { name : 'Abhinav' }
     })
     post.save()
