@@ -3,6 +3,8 @@ const path = require('path');
 
 const  {validationResult} = require('express-validator/check');
 
+const io = require('../socket');
+
 const Post = require('../models/post');
 
 module.exports.getPosts = (req, res, next) => {
@@ -49,7 +51,6 @@ module.exports.createPost = (req, res, next) => {
     const title = req.body.title;
     const content = req.body.content;
     
-    // Create Post in DB
 
     const post = new Post({
         title : title,
@@ -60,6 +61,10 @@ module.exports.createPost = (req, res, next) => {
     post.save()
         .then(result => {
             // console.log(result);
+            io.getIO().emit('posts',{
+                action : 'create',
+                post : post
+            });
             res.status(201).json({
                 message : 'Created Post Successfully',
                 post : result
