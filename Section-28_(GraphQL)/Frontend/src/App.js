@@ -127,7 +127,6 @@ class App extends Component {
       body : JSON.stringify(graphqlQuery)
     })
       .then(res => {
-        console.log(res);
         return res.json();
       })
       .then(resData => {
